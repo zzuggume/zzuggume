@@ -1,0 +1,58 @@
+#include <HuemonelabKit.h>
+
+int blueTx=2;  
+int blueRx=3;
+int relayPin = 7;
+int ledPin = 13;
+SoftwareSerial mySerial(blueTx, blueRx);  //시리얼 통신을 위한 객체선언
+String myString=""; //받는 문자열
+DHT dht(4);
+
+void setup() {
+  Serial.begin(9600);   //시리얼모니터 
+  mySerial.begin(9600); //블루투스 시리얼 개방
+  pinMode(relayPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+}
+
+
+void loop() {
+  while(mySerial.available())  //mySerial 값이 있으면
+  {
+    char myChar = (char)mySerial.read();  //mySerial int형식의 값을 char형식으로 변환
+    myString+=myChar;   //수신되는 문자열을 myString에 모두 붙임 (1바이트씩 전송되는 것을 모두 붙임)
+    delay(5);           //수신 문자열 끊김 방지
+  }
+
+  if(!myString.equals(""))  //myString 값이 있다면
+  {
+    Serial.println("input value: "+myString); //시리얼모니터에 myString값 출력
+
+      if(myString=="on")  //myString 값이 'on' 이라면
+      {
+        digitalWrite(relayPin, HIGH); //LED ON
+      } else {
+        digitalWrite(relayPin, LOW);  //LED OFF
+      }
+
+    myString="";  //myString 변수값 초기화
+  }
+  {
+     int t = dht.readT();
+  int h = dht.readH();
+  Serial.print("습도: ");
+  Serial.print(h);
+  Serial.print("%");
+  Serial.print(" 온도: ");
+  Serial.print(t);
+  Serial.println("도");
+  delay(2000);
+  
+  //앱인벤터에서 블루투스를 통해 출력하기 위한 코드
+  mySerial.print("온도: ");
+  mySerial.print(t);
+  mySerial.print(" 습도: ");
+  mySerial.print(h);
+  mySerial.print("%");
+  }
+}
