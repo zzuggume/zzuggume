@@ -1,0 +1,23 @@
+#include <Adafruit_NeoPixel.h>           
+
+
+int n_led = 18;    // 네오픽셀 수는 4개
+int neo_pin = 6;  // 네오픽셀은 6번핀에 연결
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(n_led, neo_pin, NEO_GRB + NEO_KHZ800); 
+void setup()
+{
+  strip.begin(); 
+}
+
+void loop()
+{
+    strip.show();
+    delay(1000);
+    for(int ii=0; ii<n_led; ii++){
+        strip.setPixelColor(ii, 0, 0, 128);
+        strip.show();
+        delay(1000);
+    }
+
+                
+}
