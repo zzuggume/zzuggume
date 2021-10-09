@@ -1,0 +1,77 @@
+from ursina import *
+import random
+import threading
+import time
+import datetime
+
+
+app = Ursina()
+
+window.borderless = False
+window.color = color._20
+
+Text.default_font = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
+
+bitcoin = 0
+quote = random.randint(1,100)
+bitcoin_text = Text(text=str(bitcoin), x=-0.02, y=0.3, scale=2, background=True)
+queto_text = Text(text=str(bitcoin), x=-0.03, y=0.4, scale=2, background=True)
+button = Button(text='buy', color=color.orange, x=-0.6, scale=0.2)
+
+def button_click():
+    global gold
+    bitcoin += 1
+
+def printtest():
+	now_time = '({})'.format(datetime.datetime.now().strftime('%y/%m/%d %H:%M:%S'))
+	print("bitcoin")
+
+	threading.Timer(5, printtest).start()
+
+if __name__ == '__main__':
+	printtest()
+
+def auto_plus_gold(plus=1, interval=1):
+        global gold
+        gold += plus
+
+        invoke(auto_plus_gold, plus, delay=interval)
+
+def get_auto_gold(button, plus=1):
+        global gold
+
+        if gold >= button.cost:
+            gold -= button.cost
+
+            button.cost = int(button.cost * 1.2)
+            button.upgrade += 1
+            button.text = f'+{button.upgrade}\n{button.earn}G/초\n가격 {button.cost}G'
+
+            invoke(auto_plus_gold, plus=plus, interval=1)
+
+auto_settings = [
+        {
+            'GTxx'
+            'cost': 10,
+            'earn': 1,
+            'upgrade': 0,
+        },
+        {
+            'GTX10xx'
+            'cost': 100,
+            'earn': 5,
+            'upgrade': 0,
+        },
+        {
+            'RTX20xx'
+            'cost': 1000,
+            'earn': 25,
+            'upgrade': 0,
+        },
+        {
+            'RTX30xx'
+            'cost': 10000,
+            'earn': 100,
+            'upgrade': 0,
+        },
+    ]
